@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+</head>
+<body>
+    <form id="file-catcher">
+        <input type="file" id="file-input" multiple>
+        <button type="submit">
+            Submit
+        </button>
+    </form>
+
+    <script>
+        var fileInput = document.getElementById('file-input');
+        var fileList = [];
+
+        fileInput.addEventListener('change', function(e) {
+            fileList = [];
+            for (var i = 0; i < fileInput.files.length; i ++) {
+                fileList.push(fileInput.files[i]);
+            }
+        });
+
+        var fileCatcher = document.getElementById('file-catcher');
+
+        fileCatcher.addEventListener('submit', function(e) {
+            e.preventDefault();
+            fileList.forEach(function (file) {
+                sendFile(file);
+            });
+        });
+
+        
+
+        sendFile = function (file) {
+            var formData = new FormData();
+            
+            formData.append("name", "This is name");
+            formData.append('file', file);
+
+            fetch("http://localhost:3000/upload", {
+                method: 'POST',
+                body: formData,
+            })
+            .then((res) => console.log(res))
+            .catch((err) => ("Error occured", err));
+        }
+    </script>
+</body>
+</html>
